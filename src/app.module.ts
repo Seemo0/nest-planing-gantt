@@ -6,12 +6,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { GranttModule } from './grantt/grantt.module';
 import { PassportModule } from '@nestjs/passport';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://nestapp:interview@cluster0.bmkpabl.mongodb.net/nestapp',
-    ),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       global: true,
