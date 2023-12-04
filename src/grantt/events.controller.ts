@@ -9,6 +9,7 @@ import {
   Body,
   NotFoundException,
   Request,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { GranttService } from './grantt.service';
@@ -28,15 +29,18 @@ export class EventsController {
     return this.granttService.getAllEvents();
   }
 
-  @Get('id')
+  @Get(':id')
   geteventById(@Param('id') id: string) {
     return this.granttService.getEventById(id);
   }
 
-  @Post()
-  createEvent(@Body() event: Event, @Request() req: any) {
-    const createdBy = req['userId'];
-    return this.granttService.createEvent(event, createdBy);
+  @Post('create')
+  createEvent(@Body() event: Event) {
+    console.log('Received Event:', event); 
+    if (!event.title || !event.start || !event.end) {
+      throw new BadRequestException('Missing required fields (title, start, end)');
+    }
+    return this.granttService.createEvent(event);
   }
 
   @Put(':id')

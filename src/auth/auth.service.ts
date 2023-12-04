@@ -3,7 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  private readonly users = [
+    { id: 1, username: 'user', password: 'password' },
+    // Add more users as needed
+  ];
+  constructor(
+    private readonly jwtService: JwtService,
+  ) {}
 
   async createToken(userId: number) {
     const payload = { sub: userId };

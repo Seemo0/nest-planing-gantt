@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Event } from './model/event.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -12,11 +12,11 @@ export class GranttService {
   }
 
   async getEventById(eventId: string) {
-    return this.event.findById(eventId).exec();
+    return this.event.findById(eventId);
   }
 
-  async createEvent(event: Event, createdBy: number) {
-    const newEvent = new this.event({ ...event, createdBy });
+  async createEvent(event: Event) {
+    const newEvent = new this.event(event);
     return newEvent.save();
   }
 
